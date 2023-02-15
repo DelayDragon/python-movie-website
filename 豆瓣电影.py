@@ -6,7 +6,6 @@ from lxml import etree  # 数据解析模块
 import time
 from multiprocessing.dummy import Pool
 from requests.exceptions import RequestException
-import requests
 
 # 插入数据到数据库
 def insert(value):
