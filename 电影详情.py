@@ -60,15 +60,17 @@ def get_html_data():
         movie_type1 = get_first_text(html.xpath('//*[@id="info"]/span[5]/text()'))
         movie_type2 = get_first_text(html.xpath('//*[@id="info"]/span[6]/text()'))
         movie_type3 = get_first_text(html.xpath('//*[@id="info"]/span[7]/text()'))
-        production_area = get_first_text(html.xpath('//*[@id="info"]/text()[3]'))
+
+        production_area = get_first_text(html.xpath('//*[@id="info"]/text()[3]/text()[2]'))
         language = get_first_text(html.xpath('//*[@id="info"]/text()[4]'))
         # show_time = get_first_text(html.xpath('//*[@id="info"]/span[11]/text()'))
-        show_time = get_first_text(html.xpath('//*[@id="info"]/span[11]/text()'))
-        movie_time = get_first_text(html.xpath('//*[@id="info"]/span[13]/text()'))
+        show_time = get_first_text(html.xpath('//*[@id="info"]/span[@property="v:initialReleaseDate"]/text()'))
+        movie_time = get_first_text(html.xpath('//*[@id="info"]/span[@property="v:runtime"]/text()'))
         alias = get_first_text(html.xpath('//*[@id="info"]/text()[5]/text()'))
 
         print(title,year,poster,dictor,dictor_src,screenwriter,screenwriter_src,movie_type1,movie_type2,movie_type3,
-            production_area,language,show_time,movie_time,alias
+            production_area,language,show_time,movie_time
         )
+        print(production_area)
 
 get_html_data()
