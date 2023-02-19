@@ -79,9 +79,8 @@ def get_html_data():
         #     print(type.string)
 
         # 制片国家/地区
-        movie_country = soup.select('div[id="info"]')[0].string
-        # movie_country = soup.select('div[id="info"]')[0]
-        print(movie_country)
+        # movie_country = soup.select('div[id="info"]')[0].text
+        # print(movie_country)
 
         # 语言
         # language = soup.select('#info')[0]
@@ -105,6 +104,10 @@ def get_html_data():
         # print(offical_website)
 
         # 剧情简介
-        # plot = soup.select('span[property="v:summary"]')
-        # print(plot)
+        # plot = soup.select('span[property="v:summary"]')[0].text
+        # print(plot.strip())
+
+        # 豆瓣评分
+        # score = soup.select('strong[property="v:average"]')[0].string
+        # print(score)
 get_html_data()

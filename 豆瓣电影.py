@@ -132,4 +132,5 @@ if __name__ == '__main__':
     # p.join()
     create()
     movie_data = get_html_data()
-    insert(movie_data)
+    print(movie_data)
+    # insert(movie_data)
