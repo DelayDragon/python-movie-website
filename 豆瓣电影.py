@@ -133,4 +133,4 @@ if __name__ == '__main__':
     create()
     movie_data = get_html_data()
     print(movie_data)
-    # insert(movie_data)
+    insert(movie_data)

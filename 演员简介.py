@@ -12,7 +12,7 @@ def get_number(value):
     number = re.compile(r'\d+').findall(value)[0]
     return number
 
-def getMovieId():
+def get_movie_id():
     arr = []
     db = pymysql.connect(host='localhost',
                     port=3306,
@@ -28,7 +28,7 @@ def getMovieId():
     db.close()
     return arr
 
-array = getMovieId()
+array = get_movie_id()
 urls = ['https://movie.douban.com/subject/{}/celebrities'.format(str(i)) for i in array]
 
 # 连接列表中的数据成字符串
