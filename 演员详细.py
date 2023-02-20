@@ -114,17 +114,38 @@ def create():
 
     sql = """CREATE TABLE actor_details (
         id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-        actor_id INT NOT NULL,
-        name VARCHAR(255) ,
-        avatar VARCHAR(255) ,
-        role VARCHAR(255) ,
-        works VARCHAR(255)
+        actor_name CHAR(255),
+        attribute_list CHAR(255),
+        personal_introduction VARCHAR(2000)
     )"""
     cursor.execute(sql)
     db.close()
 
+# 插入数据
+def insert(values):
+    db = pymysql.connect(host='localhost',
+                    port=3306,
+                    database='movie-website',
+                    user='root',
+                    password='admin123',
+                    charset='utf8'
+                    )
+    cursor = db.cursor() 
+    sql = 'INSERT INTO actor_details(actor_name,attribute_list,personal_introduction) VALUES(%s,%s,%s)'   
+    cursor.executemany(sql,values)
+    db.commit()
+    print('插入数据成功') 
+    # try:
+    #     cursor.executemany(sql,values)
+    #     db.commit()
+    #     print('插入数据成功')
+    # except:
+    #     db.rollback()
+    #     print('插入数据失败')
+    db.close()
+
+create()
 info = get_actor_id()
 info_redo = remove_repetition_test(info)
-
 actor_details = get_actor_details(info_redo)
-print(actor_details)
+insert(actor_details)
