@@ -132,16 +132,13 @@ def insert(values):
                     )
     cursor = db.cursor() 
     sql = 'INSERT INTO actor_details(actor_name,attribute_list,personal_introduction) VALUES(%s,%s,%s)'   
-    cursor.executemany(sql,values)
-    db.commit()
-    print('插入数据成功') 
-    # try:
-    #     cursor.executemany(sql,values)
-    #     db.commit()
-    #     print('插入数据成功')
-    # except:
-    #     db.rollback()
-    #     print('插入数据失败')
+    try:
+        cursor.executemany(sql,values)
+        db.commit()
+        print('插入数据成功')
+    except:
+        db.rollback()
+        print('插入数据失败')
     db.close()
 
 create()

@@ -39,7 +39,6 @@ def get_number(value):
     number = re.compile(r'\d+').findall(value)[0]
     return number
 
-
 # 提取数据
 def get_html_data():
     headers = {
@@ -145,7 +144,7 @@ def get_html_data():
 
         # 电影简介
         movie_plot = soup.select('span[property="v:summary"]')[0].text.strip().replace(' ','')
-        print(movie_plot)
+        # print(movie_plot)
 
         item.append(movie_name)
         item.append(movie_year)
@@ -153,8 +152,59 @@ def get_html_data():
         item.append(movie_score)
         item.append(movie_comment)
         item.append(movie_attributes)
+        item.append(movie_plot)
         info.append(item)
 
-    # print(info)
+    print(info)
+    return info
 
-get_html_data()
+# 连接数据库，建表
+def create():
+    db = pymysql.connect(host='localhost',
+                         port=3306,
+                         database='movie-website',
+                         user='root',
+                         password='admin123',
+                         charset='utf8'
+                         )
+    cursor = db.cursor()
+    cursor.execute("DROP TABLE IF EXISTS movie_details")
+
+    sql = """CREATE TABLE movie_details (
+        id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+        movie_name VARCHAR(255),
+        movie_year VARCHAR(255),
+        movie_postor VARCHAR(255),
+        movie_score VARCHAR(255),
+        movie_comment VARCHAR(255),
+        movie_attributes VARCHAR(1000),
+        movie_plot VARCHAR(1000)
+    )"""
+    cursor.execute(sql)
+    db.close()
+
+# 插入数据
+def insert(values):
+    db = pymysql.connect(host='localhost',
+                    port=3306,
+                    database='movie-website',
+                    user='root',
+                    password='admin123',
+                    charset='utf8'
+                    )
+    cursor = db.cursor() 
+    sql = 'INSERT INTO movie_details(movie_name,movie_year,movie_postor,movie_score,movie_comment,movie_attributes,movie_plot) VALUES(%s,%s,%s,%s,%s,%s,%s)'   
+    try:
+        cursor.executemany(sql,values)
+        db.commit()
+        print('插入数据成功')
+    except:
+        db.rollback()
+        print('插入数据失败')
+    db.close()
+
+
+create()
+
+info = get_html_data()
+insert(info)
