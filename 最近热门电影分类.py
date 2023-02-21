@@ -8,7 +8,6 @@ import pypinyin
 
 tags = getTags()
 
-
 def insertMovie(tag,values):
     db = pymysql.connect(host='localhost',
                          port=3306,
@@ -30,7 +29,6 @@ def insertMovie(tag,values):
         db.rollback()
         print('插入数据失败')
     db.close()
-
 
 def toNull(arr):
     array = []
@@ -64,14 +62,12 @@ def getLastlyMovie():
         #     res = requests.get(url=url, headers=headers).text
         #     print(json.loads(res)['subjects'])
 
-
 # 中文转化为拼音，用于建立数据库表
 def pinyin(value):
     s = ''
     for i in pypinyin.pinyin(value, style=pypinyin.NORMAL):
         s += ''.join(i) + ""
     return s
-
 
 def create(tag):
     db = pymysql.connect(host='localhost',
@@ -98,7 +94,6 @@ def create(tag):
     )""".format(tag)
     cursor.execute(sql)
     db.close()
-
 
 getLastlyMovie()
 # for tag in tags:

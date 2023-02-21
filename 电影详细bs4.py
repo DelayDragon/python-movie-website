@@ -39,6 +39,7 @@ def get_number(value):
     number = re.compile(r'\d+').findall(value)[0]
     return number
 
+
 # 提取数据
 def get_html_data():
     headers = {
@@ -46,6 +47,7 @@ def get_html_data():
     }
     info = []
     for url in urls:
+        item = []
         # res = requests.get(url=url, headers=headers)
         # html = etree.HTML(res.text)
         request = urllib.request.Request(url=url, headers=headers)
@@ -78,9 +80,8 @@ def get_html_data():
         # for type in movie_type:
         #     print(type.string)
 
-        # 制片国家/地区
-        # movie_country = soup.select('div[id="info"]')[0].text
-        # print(movie_country)
+        # 制片国家/地区 未获取
+ 
 
         # 语言
         # language = soup.select('#info')[0]
@@ -103,11 +104,57 @@ def get_html_data():
         #     offical_website = offical_website[0].string
         # print(offical_website)
 
+        # 豆瓣评分
+        # score = soup.select('strong[property="v:average"]')[0].string
+        # print(score)
+
+        # 评价人数
+        # comment = soup.find(property="v:votes").text
+        # print(comment)
+
         # 剧情简介
         # plot = soup.select('span[property="v:summary"]')[0].text
         # print(plot.strip())
 
+
+
+
+        # 电影名字
+        movie_name = soup.select('span[property="v:itemreviewed"]')[0].text
+        # print(movie_name)
+
+        # 电影年份
+        movie_year = soup.select('span[class="year"]')[0].text
+        # print(movie_year)
+
+        # 电影海报
+        movie_poster = soup.select('a[class="nbgnbg"] > img')[0]['src']
+        # print(movie_poster)
+
         # 豆瓣评分
-        # score = soup.select('strong[property="v:average"]')[0].string
-        # print(score)
+        movie_score = soup.select('strong[property="v:average"]')[0].string
+        # print(movie_score)        
+        
+        # 评价人数
+        movie_comment = soup.find(property="v:votes").text
+        # print(movie_comment)
+
+        # 电影的所有属性值
+        movie_attributes = soup.select('div[id="info"]')[0].text.split('<br>')[0]
+        # print(movie_attributes)
+
+        # 电影简介
+        movie_plot = soup.select('span[property="v:summary"]')[0].text.strip().replace(' ','')
+        print(movie_plot)
+
+        item.append(movie_name)
+        item.append(movie_year)
+        item.append(movie_poster)
+        item.append(movie_score)
+        item.append(movie_comment)
+        item.append(movie_attributes)
+        info.append(item)
+
+    # print(info)
+
 get_html_data()

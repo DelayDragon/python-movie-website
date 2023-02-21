@@ -4,7 +4,6 @@ from lxml import etree
 import pymysql
 from bs4 import BeautifulSoup
 import urllib.request
-import re
 from pybloom_live import BloomFilter
 
 # 获取演员的所有id，未去重
@@ -86,6 +85,7 @@ def get_actor_details(array):
         for attribute in attribute_list:
             a_list.append(attribute.text.replace('\n', '').replace(' ', ''))
         a_list = to_str(a_list)
+        
         # 职员简介
         personal_introduction = soup.select('div[id="intro"] > div[class="bd"]')
         try:
