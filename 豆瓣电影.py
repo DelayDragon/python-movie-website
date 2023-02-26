@@ -6,6 +6,7 @@ from lxml import etree  # 数据解析模块
 import time
 from multiprocessing.dummy import Pool
 from requests.exceptions import RequestException
+from 下载图片 import parsing_picture
 
 # 插入数据到数据库
 def insert(value):
@@ -17,14 +18,14 @@ def insert(value):
                     charset='utf8'
                     )
     cursor = db.cursor()
-    sql = "INSERT INTO DoubanTop(title,poster,src,dictor,score,comment,summary) VALUES(%s,%s,%s,%s,%s,%s,%s)"
-    try:
-        cursor.executemany(sql,value)
-        db.commit()
-        print('插入数据成功')
-    except:
-        db.rollback()
-        print('插入数据失败')
+    sql = "INSERT INTO DoubanTop(title,poster,src,dictor,else_msg,score,comment,summary,picture) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+    # try:
+    cursor.executemany(sql,value)
+    db.commit()
+    print('插入数据成功')
+    # except:
+    #     db.rollback()
+    #     print('插入数据失败')
     db.close()
 
 # 功能函数，获取列表的第一个元素，去除空格，遇空返空
@@ -54,9 +55,11 @@ def get_html_data():
                 title = get_first_text(
                     li.xpath('./div/div[2]/div[1]/a/span[1]/text()'))  # 电影标题
                 poster = get_first_text(li.xpath('./div/div[1]/a/img/@src'))  # 海报链接
+                picture = parsing_picture(poster)
                 src = get_first_text(li.xpath('./div/div[2]/div[1]/a/@href'))  # 电影链接
                 dictor = get_first_text(
                     li.xpath('./div/div[2]/div[2]/p[1]/text()'))  # 导演
+                else_msg = li.xpath('./div/div[2]/div[2]/p[1]/text()')[1].strip()
                 score = get_first_text(
                     li.xpath('./div/div[2]/div[2]/div/span[2]/text()'))  # 评分
                 comment = get_first_text(
@@ -66,14 +69,15 @@ def get_html_data():
                 # print(count,poster, title, src, dictor, score, comment, summary)  # 输出
                 # df.loc[len(df.index)] = [count, poster, title,
                 #         src, dictor, score, comment, summary]
-                item.append(poster)
                 item.append(title)
+                item.append(poster)
                 item.append(src)
                 item.append(dictor)
+                item.append(else_msg)
                 item.append(score)
                 item.append(comment)
                 item.append(summary)
-                # insert(item)
+                item.append(picture)
                 info.append(item)
         except:
             pass
@@ -102,9 +106,11 @@ def create():
         poster CHAR(255),
         src CHAR(255),
         dictor CHAR(255),
+        else_msg CHAR(255),
         score CHAR(255),
         comment CHAR(255),
-        summary CHAR(255)
+        summary CHAR(255),
+        picture LONGBLOB
     )"""
     cursor.execute(sql)
     db.close()
@@ -132,5 +138,5 @@ if __name__ == '__main__':
     # p.join()
     create()
     movie_data = get_html_data()
-    print(movie_data)
+    # print(movie_data)
     insert(movie_data)

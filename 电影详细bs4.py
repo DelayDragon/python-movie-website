@@ -8,6 +8,7 @@ import re
 
 
 
+
 def getMovieId():
     arr = []
     db = pymysql.connect(host='localhost',
@@ -19,7 +20,7 @@ def getMovieId():
                     )
     cursor = db.cursor()
     cursor.execute("SELECT ID FROM all_movie")
-    for (i,) in cursor.fetchmany(2):
+    for (i,) in cursor.fetchmany(10):
         arr.append(i)
     db.close()
     return arr

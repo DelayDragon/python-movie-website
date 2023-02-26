@@ -23,7 +23,7 @@ def get_movie_id():
                     )
     cursor = db.cursor()
     cursor.execute("SELECT ID FROM all_movie")
-    for (i,) in cursor.fetchall():
+    for (i,) in cursor.fetchmany(10):
         arr.append(i)
     db.close()
     return arr

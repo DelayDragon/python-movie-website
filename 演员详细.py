@@ -18,7 +18,7 @@ def get_actor_id():
                     )
     cursor = db.cursor()
     cursor.execute("SELECT actor_id FROM actor_brief")
-    for (i,) in cursor.fetchmany(2):
+    for (i,) in cursor.fetchall():
         arr.append(i)
     db.close()
     return arr
