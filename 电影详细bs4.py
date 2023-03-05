@@ -1,10 +1,8 @@
-import json
-import requests
-from lxml import etree
 import pymysql
 from bs4 import BeautifulSoup
 import urllib.request
 import re
+from utils.index import get_number_zero
 
 
 
@@ -24,9 +22,6 @@ def getMovieId():
         arr.append(i)
     db.close()
     return arr
-array = getMovieId()
-urls = ['https://movie.douban.com/subject/{}'.format(str(i)) for i in array]
-print(urls)
 
 # 功能函数，获取列表的第一个元素，去除空格，遇空返空
 def get_first_text(list):
@@ -46,7 +41,12 @@ def get_html_data():
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36'
     }
     info = []
-    for url in urls:
+    array = getMovieId()
+    # urls = ['https://movie.douban.com/subject/{}'.format(str(i)) for i in array]
+    for i in array:
+        url = 'https://movie.douban.com/subject/{}'.format(str(i))
+        
+    # for url in urls:
         item = []
         # res = requests.get(url=url, headers=headers)
         # html = etree.HTML(res.text)
@@ -147,6 +147,11 @@ def get_html_data():
         movie_plot = soup.select('span[property="v:summary"]')[0].text.strip().replace(' ','')
         # print(movie_plot)
 
+        # 电影编号
+        # movie_id = get_number_zero(url)
+        movie_id = i
+        
+
         item.append(movie_name)
         item.append(movie_year)
         item.append(movie_poster)
@@ -154,6 +159,7 @@ def get_html_data():
         item.append(movie_comment)
         item.append(movie_attributes)
         item.append(movie_plot)
+        item.append(movie_id)
         info.append(item)
 
     print(info)
@@ -179,7 +185,8 @@ def create():
         movie_score VARCHAR(255),
         movie_comment VARCHAR(255),
         movie_attributes VARCHAR(1000),
-        movie_plot VARCHAR(1000)
+        movie_plot VARCHAR(1000),
+        movie_id varchar(255)
     )"""
     cursor.execute(sql)
     db.close()
@@ -194,7 +201,7 @@ def insert(values):
                     charset='utf8'
                     )
     cursor = db.cursor() 
-    sql = 'INSERT INTO movie_details(movie_name,movie_year,movie_postor,movie_score,movie_comment,movie_attributes,movie_plot) VALUES(%s,%s,%s,%s,%s,%s,%s)'   
+    sql = 'INSERT INTO movie_details(movie_name,movie_year,movie_postor,movie_score,movie_comment,movie_attributes,movie_plot,movie_id) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)'   
     try:
         cursor.executemany(sql,values)
         db.commit()
@@ -208,4 +215,5 @@ def insert(values):
 create()
 
 info = get_html_data()
+# print(info)
 insert(info)

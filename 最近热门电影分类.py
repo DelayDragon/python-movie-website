@@ -4,7 +4,7 @@ import json
 import pymysql
 from translate import Translator
 import pypinyin
-
+from 下载图片 import parsing_picture
 
 tags = getTags()
 
@@ -18,8 +18,8 @@ def insertMovie(tag,values):
                          )
     cursor = db.cursor()
     print('连接成功')
-    sql = """INSERT INTO {}(epiodes_info,rate,cover_x,title,url,playable,cover,id,cover_y,is_new) 
-        VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+    sql = """INSERT INTO {}(epiodes_info,rate,cover_x,title,url,playable,cover,id,cover_y,is_new,poster) 
+        VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
     """.format(tag)
     try:
         cursor.execute(sql,values)
@@ -51,7 +51,10 @@ def getLastlyMovie():
         for i in json.loads(res)['subjects']:
             # print(toNull(list(i.values())))
             # print(list(i.values()))
-            insertMovie(pinyin(tag), list(i.values()))
+            poster = parsing_picture(i['cover'], 'resenltyHot_image/')
+            info = list(i.values())
+            info.append(poster)
+            insertMovie(pinyin(tag),info)
         # insertMovie(tag, json.loads(res)['subjects'])
         # 请求链接数组
         # urls = ['https://movie.douban.com/j/search_subjects?type=movie&tag={}&page_limit=2&page_start=0'.format(str(tags[i])) for i in range(len(tags))]
@@ -90,7 +93,8 @@ def create(tag):
         cover CHAR(255),
         id CHAR(255) PRIMARY KEY,
         cover_y INT,
-        is_new TINYINT(1)
+        is_new TINYINT(1),
+        poster longblob
     )""".format(tag)
     cursor.execute(sql)
     db.close()

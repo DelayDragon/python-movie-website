@@ -1,4 +1,4 @@
-# 导入米快
+# 导入模块
 import pandas as pd
 import pymysql
 import requests  # 网络请求模块
@@ -55,7 +55,7 @@ def get_html_data():
                 title = get_first_text(
                     li.xpath('./div/div[2]/div[1]/a/span[1]/text()'))  # 电影标题
                 poster = get_first_text(li.xpath('./div/div[1]/a/img/@src'))  # 海报链接
-                picture = parsing_picture(poster)
+                picture = parsing_picture(poster, 'Top250_image/')
                 src = get_first_text(li.xpath('./div/div[2]/div[1]/a/@href'))  # 电影链接
                 dictor = get_first_text(
                     li.xpath('./div/div[2]/div[2]/p[1]/text()'))  # 导演
