@@ -27,7 +27,7 @@ def checkProxies(proxies):
 # 获取地理池
 def get_89ip_IP():
     # 获取89免费代理网站前三页IP及其端口
-    urls = ['https://www.89ip.cn/index_{}.html'.format(str(i)) for i in range(1,4)]
+    urls = ['https://www.89ip.cn/index_{}.html'.format(str(i)) for i in range(11,20)]
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36'
     }
@@ -66,9 +66,10 @@ def getMovieId():
                     )
     cursor = db.cursor()
     cursor.execute("SELECT ID FROM all_movie")
-    for (i,) in cursor.fetchall():
+    for (i,) in cursor.fetchall()[699:1200]:
         arr.append(i)
     db.close()
+    
     return arr
 
 # 测试使用代理池
@@ -235,7 +236,7 @@ def main():
 
 
 if __name__ == '__main__':
-    create()
+    # create()
     main()
 
     
